@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>For Yan · My Love & Exam Courage</title>
+    <style>
+        /* RESET & ORIGINAL VIBRANT BACKGROUND */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Arial', sans-serif;
+            background: linear-gradient(45deg, #f06, #9f6, #f06, #9f6);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* corner gifs (stay at corners, unchanged) */
+        .cornerGif {
+            position: fixed;
+            width: 130px;
+            opacity: 0.7;
+            z-index: 5;
+            border-radius: 28px;
+            pointer-events: none;
+        }
+
+        @media (max-width: 700px) {
+            .cornerGif { width: 80px; }
+        }
+
+        #topLeft { top: 12px; left: 12px; }
+        #topRight { top: 12px; right: 12px; }
+        #bottomLeft { bottom: 12px; left: 12px; }
+        #bottomRight { bottom: 12px; right: 12px; }
+
+        /* MAIN GIF (centered, moved upward) */
+        .gif-zone {
+            text-align: center;
+            margin-top: 8vh;
+            margin-bottom: 2rem;
+            z-index: 20;
+            position: relative;
+        }
+
+        #centerGif {
+            width: 520px;
+            max-width: 70vw;
+            height: auto;
+            border-radius: 48px;
+            filter: drop-shadow(0 12px 18px rgba(0,0,0,0.3));
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+        }
+
+        /* TEXT CONTAINER: appears RIGHT BELOW the GIF */
+        .text-zone {
+            width: 90%;
+            max-width: 750px;
+            margin: 0 auto;
+            text-align: center;
+            z-index: 25;
+            padding: 0 1rem 2rem;
+        }
+
+        .quote-display {
+            font-size: 1.9rem;
+            font-weight: bold;
+            line-height: 1.4;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5), 0 0 4px rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(4px);
+            border-radius: 50px;
+            padding: 1.2rem 1.8rem;
+            border: 1px solid rgba(255,255,200,0.4);
+            letter-spacing: normal;
+            word-break: break-word;
+        }
+
+        @media (max-width: 650px) {
+            .quote-display {
+                font-size: 1.35rem;
+                padding: 0.9rem 1.2rem;
+            }
+            #centerGif {
+                width: 180px;
+            }
+            .gif-zone {
+                margin-top: 6vh;
+            }
+        }
+
+        /* simple hint message (no icons, no dashes) */
+        .hint-tap {
+            position: fixed;
+            bottom: 18px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(8px);
+            color: #fff9e6;
+            width: fit-content;
+            margin: 0 auto;
+            padding: 5px 18px;
+            border-radius: 40px;
+            z-index: 40;
+            pointer-events: none;
+            font-family: monospace;
+            border: 0.5px solid rgba(255,240,180,0.5);
+            transition: opacity 0.6s;
+        }
+
+        /* HEART EFFECTS (lightweight, no text icons) */
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: 200;
+            will-change: transform, opacity;
+            filter: drop-shadow(0 0 5px #ff88aa);
+        }
+
+        .floating-heart::before,
+        .floating-heart::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: inherit;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .floating-heart::before {
+            top: -55%;
+            left: 0;
+            transform: rotate(-45deg);
+        }
+
+        .floating-heart::after {
+            top: -55%;
+            left: 0;
+            transform: rotate(45deg);
+        }
+
+        @keyframes heartFloat {
+            0% {
+                transform: scale(0.6) translateY(0px) rotate(0deg);
+                opacity: 1;
+            }
+            40% {
+                transform: scale(1.1) translateY(-20px) rotate(10deg);
+                opacity: 0.95;
+            }
+            100% {
+                transform: scale(0.3) translateY(-90px) rotate(25deg);
+                opacity: 0;
+            }
+        }
+
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- corner decorative gifs (they stay in corners) -->
+    <img src="giphy.gif" alt="deco" class="cornerGif" id="topLeft">
+    <img src="giphy.gif" alt="deco" class="cornerGif" id="topRight">
+    <img src="giphy.gif" alt="deco" class="cornerGif" id="bottomLeft">
+    <img src="giphy.gif" alt="deco" class="cornerGif" id="bottomRight">
+
+    <!-- main animated gif (moved upward) -->
+    <div class="gif-zone">
+        <img src="animation.gif" alt="loving animation" id="centerGif">
+    </div>
+
+    <!-- text block: appears directly under the gif (white text) -->
+    <div class="text-zone">
+        <div class="quote-display" id="quoteText">Yan, my love. Tap anywhere for courage and my words</div>
+    </div>
+
+    <!-- subtle hint (no emojis, no dashes) -->
+    <div class="hint-tap" id="hintMsg">tap anywhere  music and love will start</div>
+
+    <!-- background music -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        (function() {
+            // ---------- CLEAN QUOTES: NO ICONS, NO EMDASH OR DASH ----------
+            const loveMessages = [
+                "My darling Yan, I am so proud of you.",
+                "You have got this, love of my life. Every answer is a step toward your beautiful future.",
+                "No matter what happens, I will always be here. Right beside you, holding your hand.",
+                "Breathe. Trust yourself. You have already been a brilliant woman I adore and love.",
+                "Graduation exam day: you are braver than any question. My heart cheers for you always.",
+                "I believe in you completely, Yan. Your effort and heart are already a victory.",
+                "After this exam, I will hold you close. Until then, know my love surrounds you.",
+                "You are never alone. Every challenge you face, I face it with you. Forever yours.",
+                "Take a deep breath, sweetheart. You are stronger than any obstacle. I love you.",
+                "This moment belongs to you. Win or learn, I will celebrate you endlessly.",
+                "You are the love of my entire life. Today, tomorrow, always. I am here.",
+                "Keep going, my everything. Your courage inspires me every single day."
+            ];
+
+            // DOM elements
+            const music = document.getElementById('bgMusic');
+            const centerGif = document.getElementById('centerGif');
+            const quoteEl = document.getElementById('quoteText');
+            const hintMsg = document.getElementById('hintMsg');
+
+            let musicStarted = false;
+            let msgInterval = null;
+            let currentIdx = 0;
+            let carouselActive = false;
+
+            // Start rotating messages (clean text, no symbols)
+            function startLoveCarousel() {
+                if (carouselActive) return;
+                carouselActive = true;
+                if (msgInterval) clearInterval(msgInterval);
+                
+                if (quoteEl && loveMessages.length) {
+                    quoteEl.textContent = loveMessages[0];
+                    currentIdx = 1;
+                }
+                
+                msgInterval = setInterval(() => {
+                    if (currentIdx < loveMessages.length) {
+                        quoteEl.textContent = loveMessages[currentIdx];
+                        currentIdx++;
+                    } else {
+                        // loop back to give endless encouragement
+                        currentIdx = 0;
+                        quoteEl.textContent = loveMessages[currentIdx];
+                        currentIdx++;
+                    }
+                }, 4400);
+            }
+
+            // ---------- LIGHTWEIGHT HEART BURST (no lag, soft effect) ----------
+            function createSingleHeart(x, y) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                
+                // romantic soft colors (pink, coral, rose)
+                const colors = ['#FF4D6D', '#FF758F', '#FF8AAE', '#FFB3C6', '#FF69B4', '#E8436E', '#F07A8F'];
+                const colorChoice = colors[Math.floor(Math.random() * colors.length)];
+                heart.style.backgroundColor = colorChoice;
+                
+                const size = Math.floor(Math.random() * 14) + 12; // 12-26px
+                heart.style.width = size + 'px';
+                heart.style.height = size + 'px';
+                heart.style.left = (x - size/2) + 'px';
+                heart.style.top = (y - size/2) + 'px';
+                
+                const rotateVal = (Math.random() - 0.5) * 40;
+                heart.style.transform = `rotate(${rotateVal}deg)`;
+                heart.style.animation = `heartFloat 1.2s cubic-bezier(0.34, 1.2, 0.64, 1) forwards`;
+                
+                document.body.appendChild(heart);
+                setTimeout(() => {
+                    if (heart && heart.remove) heart.remove();
+                }, 1200);
+            }
+            
+            // spawn romantic heart formation (low element count, smooth)
+            function spawnHeartCluster(x, y) {
+                // heart shaped pattern (gentle)
+                const points = [];
+                for (let t = 0; t <= Math.PI * 2; t += 0.25) {
+                    const scale = 10;
+                    let px = 16 * Math.pow(Math.sin(t), 3);
+                    let py = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+                    points.push({ x: px * scale, y: py * scale });
+                }
+                
+                // create limited hearts for performance (16-22 hearts)
+                const formationCount = Math.floor(Math.random() * 12) + 16;
+                for (let i = 0; i < formationCount; i++) {
+                    const point = points[i % points.length];
+                    const jitterX = (Math.random() - 0.5) * 12;
+                    const jitterY = (Math.random() - 0.5) * 12;
+                    createSingleHeart(x + point.x + jitterX, y + point.y + jitterY);
+                }
+                
+                // a few extra hearts around
+                const extra = Math.floor(Math.random() * 12) + 8;
+                for (let s = 0; s < extra; s++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = Math.random() * 40 + 10;
+                    const offX = Math.cos(angle) * radius;
+                    const offY = Math.sin(angle) * radius;
+                    createSingleHeart(x + offX, y + offY);
+                }
+            }
+
+            // ----- MAIN INTERACTION: start music, fade gif a bit, show quotes & hearts -----
+            function onUserEngagement(e) {
+                if (!musicStarted) {
+                    music.play().then(() => {
+                        // slightly fade center gif so white text stands out more, but still visible
+                        //if (centerGif) {
+                        //    centerGif.style.opacity = "0.5";
+                        //    centerGif.style.transition = "opacity 0.8s";
+                        //}
+                        startLoveCarousel();
+                        if (hintMsg) {
+                            hintMsg.style.opacity = "0";
+                            setTimeout(() => {
+                                if (hintMsg) hintMsg.style.display = "none";
+                            }, 900);
+                        }
+                    }).catch(err => {
+                        // even if audio fails, still show quotes and magic
+                        startLoveCarousel();
+                        if (centerGif) centerGif.style.opacity = "0.5";
+                        if (hintMsg) hintMsg.style.opacity = "0";
+                    });
+                    musicStarted = true;
+                }
+                
+                // spawn hearts at click/tap position
+                const clickX = e.clientX;
+                const clickY = e.clientY;
+                if (clickX && clickY) {
+                    spawnHeartCluster(clickX, clickY);
+                }
+            }
+            
+            // click & touch (mobile friendly, prevents scroll while keeping interaction)
+            document.addEventListener('click', function(e) {
+                onUserEngagement(e);
+            });
+            
+            document.addEventListener('touchstart', function(e) {
+                const touch = e.touches[0];
+                if (touch) {
+                    const fakeEvent = { clientX: touch.clientX, clientY: touch.clientY };
+                    onUserEngagement(fakeEvent);
+                }
+                // we don't call preventDefault aggressively, but allow page to stay scroll-free
+                if (e.cancelable) e.preventDefault();
+            }, { passive: false });
+            
+            // initial friendly message (no emojis, no dashes)
+            if (quoteEl) {
+                quoteEl.textContent = "Yan, my love. Tap anywhere for magicc";
+            }
+            
+            // fallback for missing gif images (keeps layout clean)
+            const allImgs = document.querySelectorAll('img');
+            allImgs.forEach(img => {
+                img.onerror = () => {
+                    img.style.opacity = "0.2";
+                };
+            });
+            
+            // small ambient particles? no icons, just minimal background charm (no emojis)
+            // we skip extra sparkles to follow "no too many icons" rule.
+            console.log("For Yan - with all my love, always here.");
+        })();
+    </script>
+</body>
+</html>
